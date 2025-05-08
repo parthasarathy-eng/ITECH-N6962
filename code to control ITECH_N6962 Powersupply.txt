@@ -1,0 +1,141 @@
+/*@!Encoding:1252*/
+includes
+{
+ 
+}
+
+variables
+{
+ int port =7;
+}
+
+Method 1 
+---------------------------------------------
+---------------------------------------------
+
+on key 'g'
+{
+	long res;   
+	char text[256] = "VOLT 10";
+	byte buffer[256];
+	int i;
+	int length;
+	byte Port_Num =7;
+	res = RS232Open(Port_Num) ;//Open the serial port
+  	if(res==1)
+   	 write("opened port success.");
+ 	
+	res=RS232Configure(Port_Num,9600,8,1,0);//Configure the serial port
+ 	if(res==1)
+ 	  write("Configure Port7 Success.");
+
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];
+    write("The values = %0.2x",buffer[i]);
+  }
+  
+  buffer[i]=0x0A;
+	res = RS232Send(Port_Num,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("send successs."); 
+  
+  if (1==rs232Receive(Port_Num,buffer,length))
+  {
+    write("Port received");
+    write(" buffer = %d",buffer[i]);
+  }
+ }        
+
+
+
+RS232OnSend(dword port, byte buffer[], dword number) 
+{
+ //Callback function for successful sending function
+  char timeStamp[30];
+  char text[20];
+  int i;
+  getLocalTimeString(timeStamp);
+  snprintf(text,elCount(text),"");
+  for(i=0;i<number;i++)   
+  {
+    snprintf(text,elCount(text),"%s%c",text,buffer[i]);
+  }  
+  write("%s : >>>>%s",timeStamp,text);
+}
+
+
+
+
+RS232OnError(dword port, dword errorFlags)
+{ //Callback function for sending function failure
+   if ( errorFlags & 1 )
+      writeLineEx(0,3,"send failed");
+   if ( errorFlags & 2 )
+      writeLineEx(0,3,"receive failed");
+}
+
+
+
+on key 'c'
+{
+  if(1 == rs232Close(7))
+    write("Port Closed Succesfully");
+    
+}
+
+
+
+Method 2
+---------------------------------------------
+---------------------------------------------
+
+on start
+{
+  long res;
+  if(1 == rs232Close(port))
+    write("Port Closed Succesfully");
+  res = rs232Open(port);
+  if(res==1)
+    write("opened port is success");
+   res = rs232Configure(port,9600,8,1,0);
+  if(res==1)
+    write("configure port is success");
+}
+
+
+
+void set_voltage(double volts)
+ 
+{
+  char voltagestr[20];
+  byte voltbuffer[40];
+  int i;
+  snprintf(voltagestr,elcount(voltagestr),"VOLT %0.2f",volts);
+  for (i=0;i<strlen(voltagestr);i++)
+  {
+    voltbuffer[i]=voltagestr[i];
+    
+  }
+  voltbuffer[i]=0x0A;
+  
+  if (1==  RS232Send(port,voltbuffer,i+1))
+	{
+	   write("voltage set to %s -%d-",voltagestr,i);
+  }
+}
+
+
+on sysvar powersply::voltage
+{
+  set_voltage(@this);
+}
+
+
+
+
+
+
+

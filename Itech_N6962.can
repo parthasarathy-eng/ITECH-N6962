@@ -1,0 +1,282 @@
+/*@!Encoding:1252*/
+includes
+{
+ 
+}
+
+variables
+{
+ int port =7;
+}
+
+on start
+{
+  long res;
+  if(1 == rs232Close(port))
+    write("Port Closed Successfully");
+  res = rs232Open(port);
+  if(res==1)
+    write("Port Opened Successfully");
+   res = rs232Configure(port,9600,8,1,0);
+  if(res==1)
+    write("Port Configured successfully");
+}
+
+
+on sysvar Power_Suppy::Control
+{
+  if ((@this)==0) // Make the Power Supply as OFF
+  {
+	long res;   
+	char text[256] = "OUTP 0";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  }
+  
+  if ((@this)==1) // Make the Power Supply as OFF
+  {
+    long res;   
+	char text[256] = "OUTP 1";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  }
+ }
+
+
+on sysvar Power_Suppy::Normal_Voltage
+{
+	if((@this) == 1)
+  {
+    long res;   
+	char text[256] = "VOLT 12.5";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  }
+  
+  if((@this)==0)
+  {
+    long res;   
+	char text[256] = "VOLT 0";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  }
+} 
+
+
+
+
+
+on sysvar Power_Suppy::Low_Voltage
+{
+  if((@this)==1)
+   {
+     long res;   
+	char text[256] = "VOLT 7.6";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully");
+   }
+  
+  if((@this)==0)
+  {
+    long res;   
+	char text[256] = "VOLT 0";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  }
+	 
+} 
+
+
+
+
+on sysvar Power_Suppy::High_Voltage 
+{
+	if((@this)==1)
+  {
+    long res;   
+
+    char text[256] = "VOLT 17.5";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  }
+  
+  if((@this)==0)
+  {
+    long res;   
+	char text[256] = "VOLT 0";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  }
+} 
+
+
+
+
+on sysvar Power_Suppy::Engine_Run_Voltage
+{
+  if((@this)==1)
+  {
+    long res;   
+	char text[256] = "VOLT 13.6";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  }
+  
+ if((@this)==0)
+  {
+    long res;   
+	char text[256] = "VOLT 0";
+	byte buffer[256];
+	int i;
+	int length;
+	 
+	length=strlen(text);
+	for (i=0;i<length;i++)
+  {
+	  buffer[i]=text[i];   
+  }  
+  buffer[i]=0x0A;
+  
+	res = RS232Send(port,buffer,(length+1)); //send data.
+	if ( res==1)
+	   write("Command Send Successfully"); 
+  } 
+	
+} 
+
+
+
+void set_voltage(double volts)
+ 
+{
+  char voltagestr[20];
+  byte voltbuffer[40];
+  int i;
+  snprintf(voltagestr,elcount(voltagestr),"VOLT %0.2f",volts); // For concatanating: voltagestr = VOLT 12.36s
+  for (i=0;i<strlen(voltagestr);i++)
+  {
+    voltbuffer[i]=voltagestr[i];
+    
+  }
+  voltbuffer[i]=0x0A;
+  
+  if (1==  RS232Send(port,voltbuffer,i+1))
+	{
+	   write("voltage set to %s -%d-",voltagestr,i);
+  }
+}
+
+
+on sysvar powersply::voltage
+{
+  set_voltage(@this);
+}
+
