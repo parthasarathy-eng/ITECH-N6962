@@ -8,4 +8,4 @@ When we connect the power supply using USB to the PC, REM Mode will already enab
 When we connect the power supply using RS232 to the PC, REM Mode will enable by sending the command SYST:REM
 
 
-Remote_Control_ITECH_N6962.can is the updated code in which we reduce the size of the code and also implemented Over Voltage Protection (OVP) using CAPL. Also we limit voltage:  if the Input Voltage > 18.5, Output Voltage is maximum = 18.5.
+"Remote_Control_ITECH_N6962.can" is the updated code in which we reduce the size of the code and also implemented Over Voltage Protection (OVP) using CAPL. Also we limit voltage:  if the Input Voltage > 18.5, Output Voltage is maximum = 18.5.
